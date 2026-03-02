@@ -10,7 +10,7 @@
     },
     {
       "source": "/docs",
-      "destination": "https://superturtle.mintlify.app/docs"
+      "destination": "https://superturtle.mintlify.app/"
     },
     {
       "source": "/docs/llms.txt",
@@ -34,7 +34,7 @@
     },
     {
       "source": "/docs/:path*",
-      "destination": "https://superturtle.mintlify.app/docs/:path*"
+      "destination": "https://superturtle.mintlify.app/:path*"
     },
     {
       "source": "/mintlify-assets/:path+",
