@@ -39,7 +39,7 @@ export function StickyNav() {
         {/* Right: Docs + GitHub CTA */}
         <div className="flex items-center gap-3">
         <a
-          href="/docs"
+          href="https://superturtle.mintlify.app/docs"
           className="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-[#4a5f3b] hover:bg-[rgba(74,95,59,0.08)]"
         >
           Docs
