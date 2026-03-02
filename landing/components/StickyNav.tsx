@@ -36,7 +36,14 @@ export function StickyNav() {
 	          <span className="text-lg font-bold text-[#1a1815]">SuperTurtle</span>
 	        </div>
 
-        {/* Right: GitHub CTA */}
+        {/* Right: Docs + GitHub CTA */}
+        <div className="flex items-center gap-3">
+        <a
+          href="/docs"
+          className="px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-[#4a5f3b] hover:bg-[rgba(74,95,59,0.08)]"
+        >
+          Docs
+        </a>
         <a
           href="https://github.com/Rigos0/superturtle"
           target="_blank"
@@ -57,6 +64,7 @@ export function StickyNav() {
           </svg>
           GitHub
         </a>
+        </div>
       </div>
     </nav>
   );
