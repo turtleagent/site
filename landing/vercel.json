@@ -1,44 +1,19 @@
 {
-  "rewrites": [
-    {
-      "source": "/_mintlify/:path*",
-      "destination": "https://superturtle.mintlify.app/_mintlify/:path*"
-    },
-    {
-      "source": "/api/request",
-      "destination": "https://superturtle.mintlify.app/_mintlify/api/request"
-    },
+  "redirects": [
     {
       "source": "/docs",
-      "destination": "https://superturtle.mintlify.app/"
+      "destination": "/docs/bot/overview",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "https://superturtle.mintlify.dev/docs"
     },
     {
-      "source": "/docs/llms.txt",
-      "destination": "https://superturtle.mintlify.app/llms.txt"
-    },
-    {
-      "source": "/docs/llms-full.txt",
-      "destination": "https://superturtle.mintlify.app/llms-full.txt"
-    },
-    {
-      "source": "/docs/sitemap.xml",
-      "destination": "https://superturtle.mintlify.app/sitemap.xml"
-    },
-    {
-      "source": "/docs/robots.txt",
-      "destination": "https://superturtle.mintlify.app/robots.txt"
-    },
-    {
-      "source": "/docs/mcp",
-      "destination": "https://superturtle.mintlify.app/mcp"
-    },
-    {
-      "source": "/docs/:path*",
-      "destination": "https://superturtle.mintlify.app/:path*"
-    },
-    {
-      "source": "/mintlify-assets/:path+",
-      "destination": "https://superturtle.mintlify.app/mintlify-assets/:path+"
+      "source": "/docs/:match*",
+      "destination": "https://superturtle.mintlify.dev/docs/:match*"
     }
   ]
 }
