@@ -1,11 +1,4 @@
 {
-  "redirects": [
-    {
-      "source": "/docs",
-      "destination": "/docs/bot/overview",
-      "permanent": false
-    }
-  ],
   "rewrites": [
     {
       "source": "/docs",
