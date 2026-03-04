@@ -1,0 +1,84 @@
+---
+title: TOS Compliance
+description: How Super Turtle uses Claude Code and why it is compliant with Anthropic's terms of service
+---
+
+Super Turtle uses the Claude Code CLI as a headless subprocess. It does not extract, proxy, or reuse OAuth tokens for model inference. This page explains exactly how the CLI is invoked and why this is compliant with Anthropic's terms.
+
+## How Super Turtle invokes Claude Code
+
+Every interaction — whether from Telegram text, voice, or a SubTurtle loop — spawns the `claude` binary as a child process:
+
+```typescript
+// super_turtle/claude-telegram-bot/src/session.ts
+const args = [
+  claudeBin,
+  "-p", message,                      // non-interactive prompt mode
+  "--output-format", "stream-json",   // structured streaming output
+  "--dangerously-skip-permissions",   // bypass per-action prompts
+  "--model", model,                   // claude-sonnet-4-6, etc.
+  "--setting-sources", "user,project" // load CLAUDE.md
+];
+
+const proc = Bun.spawn(args, {
+  cwd: WORKING_DIR,
+  stdout: "pipe",
+  stderr: "pipe"
+});
+```
+
+SubTurtles do the same thing:
+
+```python
+# super_turtle/subturtle/subturtle_loop/agents.py
+cmd = ["claude", "--dangerously-skip-permissions", "-p", prompt]
+proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+```
+
+This is the [officially documented headless CLI usage](https://docs.anthropic.com/en/docs/claude-code/cli-usage) — the same pattern used by CI pipelines, editor extensions, and automation tools.
+
+## What Super Turtle does
+
+- Spawns the `claude` binary as a subprocess with standard CLI flags (`-p`, `--output-format stream-json`)
+- Uses whatever authentication the CLI already has (your logged-in session)
+- Reads structured JSON events from stdout
+- Manages session IDs for conversation continuity
+
+That is the entire integration surface. The bot is a thin orchestration layer on top of the official CLI.
+
+## What Super Turtle does NOT do
+
+<Warning>
+These are the practices that have led to account bans in the community. Super Turtle does none of them.
+</Warning>
+
+- **Does NOT extract OAuth tokens** from your keychain or credential store for use outside the `claude` binary
+- **Does NOT proxy your subscription** credentials to other users, services, or API wrappers
+- **Does NOT use the Anthropic API or Agent SDK** with subscription OAuth tokens — it shells out to the CLI directly
+- **Does NOT circumvent** Claude Code's rate limiting, usage caps, or billing mechanisms
+- **Does NOT share or pool** credentials across multiple users or accounts
+
+## The `/usage` command
+
+The bot's `/usage` command reads your local OAuth token to call Anthropic's own usage-reporting endpoint:
+
+```
+GET https://api.anthropic.com/api/oauth/usage
+Authorization: Bearer <your-token>
+```
+
+<Info>
+This is the same endpoint that Claude Code's built-in `/usage` slash command calls. It is **read-only** — it returns your current usage stats and nothing else. The token is never used for model inference, message sending, or any other purpose.
+</Info>
+
+## Why this matters
+
+In early 2026, several projects were banned or flagged for extracting Claude Code's OAuth session tokens and using them with custom API wrappers — effectively getting API-level access through a consumer subscription. Anthropic clarified in their [updated consumer terms](https://www.anthropic.com/legal/consumer-terms) that using OAuth tokens obtained through Claude subscriptions in any other product or tool is not permitted.
+
+Super Turtle avoids this entirely by treating the `claude` binary as a black box. It passes prompts in, reads responses out, and never touches the authentication layer.
+
+## References
+
+- [Claude Code CLI usage](https://docs.anthropic.com/en/docs/claude-code/cli-usage) — official headless flags (`-p`, `--output-format`, etc.)
+- [Anthropic Consumer Terms](https://www.anthropic.com/legal/consumer-terms) — the underlying legal document
+- [Security Model](/config/security) — how Super Turtle handles the `--dangerously-skip-permissions` flag

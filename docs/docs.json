@@ -84,6 +84,7 @@
             "group": "Configuration",
             "pages": [
               "config/environment-variables",
+              "config/tos-compliance",
               "config/security",
               "config/platform-support"
             ]
