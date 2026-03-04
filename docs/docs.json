@@ -14,12 +14,7 @@
   },
   "favicon": "/assets/hero-double-turtle.png",
   "fonts": {
-    "heading": {
-      "family": "Fredoka"
-    },
-    "body": {
-      "family": "Nunito"
-    }
+    "family": "Nunito"
   },
   "navigation": {
     "tabs": [
