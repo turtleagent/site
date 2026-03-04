@@ -3,7 +3,7 @@ title: Environment Variables Reference
 description: Complete reference of all configuration environment variables
 ---
 
-All bot configuration is done through environment variables. Keep sensitive values in `.env` (gitignored) and never commit credentials.
+All bot configuration is done through environment variables in `.superturtle/.env` (created by `superturtle init`, gitignored). Never commit credentials.
 
 ## Required Variables
 
@@ -55,17 +55,7 @@ Get from [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 
 Voice transcription won't work without this, but other features are unaffected.
 
-## Claude Code / Codex
-
-### ANTHROPIC_API_KEY
-
-API key for Claude Code (optional if using CLI auth).
-
-```bash
-ANTHROPIC_API_KEY=sk-ant-v0-1234567890abcdef
-```
-
-Get from [console.anthropic.com](https://console.anthropic.com/). Usually not needed if Claude Code is installed.
+## Codex
 
 ### CODEX_ENABLED
 
@@ -287,16 +277,6 @@ CLAUDE_CLI_PATH=/opt/homebrew/bin/claude
 
 Usually auto-detected. Set only if `claude` command is not in your PATH.
 
-### CODEX_CLI_PATH
-
-Path to the Codex CLI binary.
-
-```bash
-CODEX_CLI_PATH=/opt/homebrew/bin/codex
-```
-
-Usually auto-detected. Set only if `codex` command is not in your PATH.
-
 ## Configuration Groups
 
 ### Minimal Setup
@@ -398,31 +378,19 @@ The bot validates on startup:
 
 | Validation | Error | Fix |
 |-----------|-------|-----|
-| `TELEGRAM_BOT_TOKEN` missing | "ERROR: TELEGRAM_BOT_TOKEN required" | Add to `.env` |
+| `TELEGRAM_BOT_TOKEN` missing | "ERROR: TELEGRAM_BOT_TOKEN required" | Add to `.superturtle/.env` |
 | `TELEGRAM_ALLOWED_USERS` missing | "ERROR: TELEGRAM_ALLOWED_USERS required" | Add your ID |
 | `RATE_LIMIT_REQUESTS` invalid | Falls back to 20 | Use integer |
 | `CODEX_SANDBOX_MODE` invalid | Warns, falls back to "workspace-write" | Use valid option |
 | Working directory doesn't exist | Bot starts but Claude can't access it | Create directory |
 
-## Hot Reload
+## Restart required
 
-Most environment variables are read at startup. **The bot must be restarted for changes to take effect.**
-
-Changes that require restart:
-- `TELEGRAM_BOT_TOKEN`
-- `TELEGRAM_ALLOWED_USERS`
-- `ALLOWED_PATHS`
-- `RATE_LIMIT_*`
-- Codex settings
-
-Changes that take effect immediately:
-- `THINKING_KEYWORDS`
-- `AUDIT_LOG_JSON`
-- `DASHBOARD_*` (if already running)
+All variables are read at startup. Restart the bot for any changes to take effect.
 
 ## Security Best Practices
 
-1. **Never commit `.env`** — It contains secrets
+1. **Never commit `.superturtle/.env`** — It contains secrets
 2. **Use strong tokens** — Telegram and OpenAI provide secure tokens
 3. **Limit `ALLOWED_PATHS`** — Only include directories Claude needs
 4. **Restrict `TELEGRAM_ALLOWED_USERS`** — Only trusted users
@@ -431,6 +399,6 @@ Changes that take effect immediately:
 
 ## Next Steps
 
-- [Security](/docs/config/security) — Full security model and threat assessment
-- [Platform Support](/docs/config/platform-support) — macOS/Linux/Windows differences
-- [Drivers](/docs/bot/drivers) — Understanding Claude Code vs Codex
+- [Security](/config/security) — Full security model and threat assessment
+- [Platform Support](/config/platform-support) — macOS/Linux/Windows differences
+- [Drivers](/bot/drivers) — Understanding Claude Code vs Codex
