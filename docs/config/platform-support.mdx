@@ -15,7 +15,7 @@ This project is currently optimized for local-first onboarding via agent-driven 
 
 ## Why macOS is the primary target
 
-- The default launch flow (`bun run start`) relies on `tmux` and macOS-focused sleep behavior guidance.
+- The default launch flow (`superturtle start`) relies on `tmux` and macOS-focused sleep behavior guidance.
 - Team validation and day-to-day testing currently happen on macOS.
 - Onboarding UX is tuned for the macOS laptop workflow.
 
@@ -33,12 +33,12 @@ On Mac laptops, long-running bot sessions are sensitive to sleep/lid behavior:
 1. Enable `System Settings -> Battery -> Options -> Prevent automatic sleeping when the display is off` (on power adapter).
 2. Keep the lid open while the bot is running.
 
-## Setup model
+## Setup
 
-The supported setup path is the guided flow in [Quickstart](/quickstart):
+```bash
+npm install -g superturtle
+superturtle init
+superturtle start
+```
 
-1. Clone repo.
-2. Open Claude Code or Codex.
-3. Prompt: `Set up Super Turtle for me.`
-
-The onboarding agent handles BotFather/user-id guidance, setup command execution, and startup verification.
+See [Quickstart](/quickstart) for the full walkthrough.

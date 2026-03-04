@@ -3,353 +3,199 @@ title: Running as a Service
 description: Keep the bot running 24/7 on macOS or Linux
 ---
 
-For a bot you can actually rely on, run it as a system service that starts on boot and restarts if it crashes.
+## Default: superturtle start (tmux)
+
+The simplest way to run the bot persistently:
+
+```bash
+superturtle start
+```
+
+This creates a tmux session called `superturtle-bot` that survives terminal disconnects.
+
+```bash
+superturtle status          # Check if running
+superturtle stop            # Stop the bot
+tmux attach -t superturtle-bot  # Re-attach to see logs
+```
+
+The bot auto-wraps with `caffeinate` on macOS (prevents sleep) and `systemd-inhibit` on Linux.
+
+<Info>
+For most users, `superturtle start` is all you need. The sections below are for production setups that need auto-start on boot and crash recovery.
+</Info>
 
 ## macOS (LaunchAgent)
 
+For auto-start on boot and automatic restart on crash.
+
 ### Setup
 
-1. Copy the template to your LaunchAgents folder:
+1. Copy the template:
 
 ```bash
-cp launchagent/com.claude-telegram-ts.plist.template \
-   ~/Library/LaunchAgents/com.claude-telegram-ts.plist
+cp super_turtle/claude-telegram-bot/launchagent/com.claude-telegram-ts.plist.template \
+   ~/Library/LaunchAgents/com.superturtle-bot.plist
 ```
 
-2. Edit the plist with your paths and credentials:
+2. Edit the plist:
 
 ```bash
-nano ~/Library/LaunchAgents/com.claude-telegram-ts.plist
+nano ~/Library/LaunchAgents/com.superturtle-bot.plist
 ```
 
-Replace `USERNAME` with your actual username, and set your environment variables:
+Set your paths and credentials:
 
 ```xml
 <key>TELEGRAM_BOT_TOKEN</key>
-<string>your-bot-token-from-botfather</string>
+<string>your-bot-token</string>
 
 <key>TELEGRAM_ALLOWED_USERS</key>
 <string>your-telegram-user-id</string>
 
 <key>CLAUDE_WORKING_DIR</key>
-<string>/Users/YOUR_USERNAME/path/to/your/folder</string>
+<string>/Users/YOUR_USERNAME/path/to/project</string>
 
 <key>PATH</key>
 <string>/Users/YOUR_USERNAME/.bun/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
 ```
 
-3. Load the service:
+3. Load and verify:
 
 ```bash
-launchctl load ~/Library/LaunchAgents/com.claude-telegram-ts.plist
+launchctl load ~/Library/LaunchAgents/com.superturtle-bot.plist
+launchctl list | grep superturtle
 ```
 
-4. Verify it's running:
+### Managing
 
 ```bash
-launchctl list | grep claude
-# Should show: com.claude-telegram-ts
+launchctl unload ~/Library/LaunchAgents/com.superturtle-bot.plist  # Stop
+launchctl load ~/Library/LaunchAgents/com.superturtle-bot.plist    # Start
+launchctl kickstart -k gui/$(id -u)/com.superturtle-bot            # Restart
 ```
 
-### Managing the Service
+### Prevent sleep
+
+Go to **System Settings > Battery > Options** and enable **"Prevent automatic sleeping when the display is off"** (on power adapter).
+
+### Shell aliases
 
 ```bash
-# Check status
-launchctl list | grep claude
-
-# Stop the bot
-launchctl unload ~/Library/LaunchAgents/com.claude-telegram-ts.plist
-
-# Start it again
-launchctl load ~/Library/LaunchAgents/com.claude-telegram-ts.plist
-
-# Restart it
-launchctl kickstart -k gui/$(id -u)/com.claude-telegram-ts
-
-# Remove it completely
-launchctl unload ~/Library/LaunchAgents/com.claude-telegram-ts.plist
-rm ~/Library/LaunchAgents/com.claude-telegram-ts.plist
-```
-
-### Logs
-
-The bot logs to:
-- **stdout:** `/tmp/claude-telegram-bot.log`
-- **stderr:** `/tmp/claude-telegram-bot.err`
-
-Watch logs in real-time:
-
-```bash
-# Standard output
-tail -f /tmp/claude-telegram-bot.log
-
-# Error output
-tail -f /tmp/claude-telegram-bot.err
-
-# Last 50 lines
-tail -50 /tmp/claude-telegram-bot.log
-```
-
-### Prevent Sleep
-
-To keep the bot running when your Mac is idle:
-
-1. Go to **System Settings → Battery → Options**
-2. Enable **"Prevent automatic sleeping when the display is off"** (when on power adapter)
-
-Or use a startup script:
-
-```bash
-# launchagent/start.sh
-#!/bin/bash
-# Caffeinate to prevent sleep while bot runs
-caffeinate -i /path/to/bun run src/index.ts
-```
-
-### Shell Aliases
-
-Add these to `~/.zshrc` or `~/.bashrc` for easy management:
-
-```bash
-# Check bot status
-alias cbot='launchctl list | grep claude'
-
-# Stop bot
-alias cbot-stop='launchctl bootout gui/$(id -u)/com.claude-telegram-ts 2>/dev/null && echo "Stopped"'
-
-# Start bot
-alias cbot-start='launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.claude-telegram-ts.plist 2>/dev/null && echo "Started"'
-
-# Restart bot
-alias cbot-restart='launchctl kickstart -k gui/$(id -u)/com.claude-telegram-ts && echo "Restarted"'
-
-# Tail logs
-alias cbot-logs='tail -f /tmp/claude-telegram-bot.log'
-```
-
-Now you can:
-
-```bash
-cbot              # Check if running
-cbot-stop         # Stop
-cbot-start        # Start
-cbot-restart      # Restart
-cbot-logs         # Watch logs
+alias st='launchctl list | grep superturtle'
+alias st-stop='launchctl bootout gui/$(id -u)/com.superturtle-bot 2>/dev/null && echo "Stopped"'
+alias st-start='launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.superturtle-bot.plist 2>/dev/null && echo "Started"'
+alias st-restart='launchctl kickstart -k gui/$(id -u)/com.superturtle-bot && echo "Restarted"'
 ```
 
 ## Linux (systemd)
 
 ### Setup
 
-1. Copy the template to your systemd user directory:
+1. Copy the template:
 
 ```bash
 mkdir -p ~/.config/systemd/user
-cp systemd/superturtle-bot.service.template \
+cp super_turtle/claude-telegram-bot/systemd/superturtle-bot.service.template \
    ~/.config/systemd/user/superturtle-bot.service
 ```
 
-2. Edit with your paths and credentials:
+2. Edit with your paths:
 
 ```bash
 nano ~/.config/systemd/user/superturtle-bot.service
 ```
 
-Replace `USERNAME` and paths:
-
 ```ini
-WorkingDirectory=/home/USERNAME/projects/agentic/super_turtle/claude-telegram-bot
-ExecStart=/home/USERNAME/.bun/bin/bun run /home/USERNAME/projects/agentic/super_turtle/claude-telegram-bot/src/index.ts
+WorkingDirectory=/home/USERNAME/superturtle/super_turtle/claude-telegram-bot
+ExecStart=/home/USERNAME/.bun/bin/bun run src/index.ts
 
-Environment=TELEGRAM_BOT_TOKEN=your-bot-token-here
+Environment=TELEGRAM_BOT_TOKEN=your-bot-token
 Environment=TELEGRAM_ALLOWED_USERS=123456789
-Environment=CLAUDE_WORKING_DIR=/home/USERNAME/projects/agentic
+Environment=CLAUDE_WORKING_DIR=/home/USERNAME/superturtle
 ```
 
-3. Reload systemd and enable the service:
+3. Enable and start:
 
 ```bash
 systemctl --user daemon-reload
 systemctl --user enable --now superturtle-bot
-```
-
-4. Check status:
-
-```bash
 systemctl --user status superturtle-bot
 ```
 
-### Managing the Service
+### Managing
 
 ```bash
-# Check status
-systemctl --user status superturtle-bot
-
-# Stop the bot
 systemctl --user stop superturtle-bot
-
-# Start the bot
 systemctl --user start superturtle-bot
-
-# Restart the bot
 systemctl --user restart superturtle-bot
-
-# Enable auto-start on boot
-systemctl --user enable superturtle-bot
-
-# Disable auto-start
-systemctl --user disable superturtle-bot
 ```
 
 ### Logs
 
-View logs with `journalctl`:
-
 ```bash
-# Real-time logs (follow mode)
-journalctl --user -u superturtle-bot -f
-
-# Last 50 lines
-journalctl --user -u superturtle-bot -n 50
-
-# Since boot
-journalctl --user -u superturtle-bot --since=boot
-
-# Since 1 hour ago
+journalctl --user -u superturtle-bot -f         # Follow
+journalctl --user -u superturtle-bot -n 50       # Last 50 lines
 journalctl --user -u superturtle-bot --since="1 hour ago"
 ```
 
-### Prevent Sleep
-
-Add to your systemd service to prevent system sleep:
-
-```ini
-[Service]
-# Prevent sleep while service is active
-ExecStartPre=/usr/bin/systemd-inhibit --what=sleep --what=idle --why="Claude Telegram Bot running" --mode=block true
-```
-
-Or use a script approach:
+### Shell aliases
 
 ```bash
-# Equivalent to macOS caffeinate
-systemd-inhibit --what=sleep --why="Bot running" sleep infinity &
+alias st='systemctl --user status superturtle-bot'
+alias st-stop='systemctl --user stop superturtle-bot'
+alias st-start='systemctl --user start superturtle-bot'
+alias st-restart='systemctl --user restart superturtle-bot'
+alias st-logs='journalctl --user -u superturtle-bot -f'
 ```
 
-### Shell Aliases
+## Development mode
 
-Add to `~/.bashrc` or `~/.zshrc`:
-
-```bash
-alias cbot='systemctl --user status superturtle-bot'
-alias cbot-stop='systemctl --user stop superturtle-bot'
-alias cbot-start='systemctl --user start superturtle-bot'
-alias cbot-restart='systemctl --user restart superturtle-bot'
-alias cbot-logs='journalctl --user -u superturtle-bot -f'
-```
-
-## Development Mode (bun run dev)
-
-For development with auto-reload:
+For contributors working on superturtle itself:
 
 ```bash
 cd super_turtle/claude-telegram-bot
-bun run dev
+bun run dev    # Auto-reload on file changes
 ```
-
-This runs with:
-- Auto-reload on file changes
-- Full error logging
-- Direct terminal output
-
-Perfect for testing changes before deploying to production.
-
-## Terminal Session Multiplexing (Advanced)
-
-For a visible, always-running session that you can attach to:
-
-```bash
-# Start or re-attach tmux session
-tmux new-session -d -s superturtle-bot -c /path/to/bot
-tmux send-keys -t superturtle-bot "bun run start" Enter
-
-# Attach from another terminal
-tmux attach -t superturtle-bot
-
-# Check if running
-tmux has-session -t superturtle-bot && echo "running" || echo "stopped"
-
-# Kill the session
-tmux kill-session -t superturtle-bot
-```
-
-The bot stays visible in tmux while you work, and survives terminal reconnects.
 
 ## Troubleshooting
 
 ### Bot doesn't start
 
-Check the error log:
-
 ```bash
-# macOS
+# tmux mode
+tmux attach -t superturtle-bot   # Check for errors
+
+# macOS LaunchAgent
 tail -f /tmp/claude-telegram-bot.err
 
-# Linux
+# Linux systemd
 journalctl --user -u superturtle-bot -f
 ```
 
-Common issues:
-- Bot token is invalid
-- Bun binary not at the path specified
-- Working directory doesn't exist
-- Missing environment variables
+Common issues: invalid bot token, missing bun binary, working directory doesn't exist.
 
 ### Bot keeps restarting
 
-Check logs for crash reasons. Common causes:
-- Claude Code authentication failed
-- Network connection lost
-- Telegram API rate limit
-- Out of memory
-
-### High CPU usage
-
-- Check if bot is in an infinite loop (shouldn't happen)
-- Verify streaming responses are terminating
-- Look at logs for errors
+Check logs for crash reasons: Claude Code auth failure, network issues, Telegram rate limit, OOM.
 
 ### Telegram not receiving messages
 
-- Verify bot token is correct (`/start` in Telegram)
+- Verify bot token (`/start` in Telegram)
 - Check user ID is in `TELEGRAM_ALLOWED_USERS`
-- Look for authentication errors in logs
-- Verify network connectivity
+- Check network connectivity
 
-## Platform Differences
+## Platform differences
 
 | Feature | macOS | Linux |
 |---------|-------|-------|
-| **Manager** | launchd (LaunchAgent) | systemd (user services) |
-| **Config location** | `~/Library/LaunchAgents/` | `~/.config/systemd/user/` |
+| **Default** | `superturtle start` (tmux) | `superturtle start` (tmux) |
+| **Service manager** | launchd | systemd |
 | **Sleep prevention** | `caffeinate` (built-in) | `systemd-inhibit` |
 | **Auto-start** | `RunAtLoad=true` | `WantedBy=default.target` |
-| **View logs** | `tail -f /tmp/...` | `journalctl` |
 
-## Production Checklist
+## Next steps
 
-- [ ] Plist/service file uses correct paths
-- [ ] Environment variables are set (token, user ID, working dir)
-- [ ] Working directory exists and is readable
-- [ ] Bot can write to log paths (`/tmp/` typically)
-- [ ] LaunchAgent/service is loaded and enabled
-- [ ] `/start` command works in Telegram
-- [ ] Logs show normal operation (no errors)
-- [ ] Sleep prevention is configured (if needed)
-- [ ] You can manage the bot with aliases
-
-## Next Steps
-
-- [Personal Assistant](/docs/bot/personal-assistant) — Set up Claude as your assistant
-- [Environment Variables](/docs/config/environment-variables) — Full config reference
-- [Security](/docs/config/security) — Understanding permissions and safety
+- [Personal Assistant](/bot/personal-assistant) — Set up Claude as your assistant
+- [Environment Variables](/config/environment-variables) — Full config reference
+- [Security](/config/security) — Permissions and safety
