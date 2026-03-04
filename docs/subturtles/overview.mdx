@@ -3,8 +3,6 @@ title: SubTurtles Overview
 description: What SubTurtles are, how their workspaces and state files work, and how they stop safely
 ---
 
-# SubTurtles Overview
-
 SubTurtles are autonomous background coding agents. The Meta Agent uses them to execute tasks without constant human supervision.
 
 The core model is simple:
@@ -25,7 +23,7 @@ Each SubTurtle:
 - Is supervised by recurring, silent cron check-ins
 
 <Info>
-`ctl spawn` defaults are `--type yolo-codex`, `--timeout 1h`, and `--cron-interval 10m`.
+`ctl spawn` defaults are `--type yolo`, `--timeout 1h`, and `--cron-interval 10m`.
 Supervision is registered with `silent: true` by default.
 (`META_SHARED.md` currently describes a 5-minute target cadence, but the executable default in `ctl` is 10 minutes unless overridden.)
 </Info>

@@ -16,7 +16,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Docs",
+        "tab": "Getting Started",
         "groups": [
           {
             "group": "Getting Started",
@@ -26,7 +26,12 @@
               "quickstart",
               "architecture"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "Bot",
+        "groups": [
           {
             "group": "Telegram Bot",
             "pages": [
@@ -37,7 +42,12 @@
               "bot/personal-assistant",
               "bot/running-as-service"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "SubTurtles",
+        "groups": [
           {
             "group": "SubTurtles",
             "pages": [
@@ -47,7 +57,12 @@
               "subturtles/state-files",
               "subturtles/skills"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "Meta Agent",
+        "groups": [
           {
             "group": "Meta Agent",
             "pages": [
@@ -56,7 +71,12 @@
               "meta/task-decomposition",
               "meta/resource-management"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "Configuration",
+        "groups": [
           {
             "group": "Configuration",
             "pages": [

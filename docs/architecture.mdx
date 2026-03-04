@@ -3,8 +3,6 @@ title: Architecture
 description: How Super Turtle coordinates work across agents and drivers
 ---
 
-# Architecture
-
 Super Turtle is a local multi-agent system controlled from Telegram. A single Meta Agent handles conversation, planning, and supervision. It can spawn SubTurtles to execute work in parallel and route loops through Claude Code or Codex.
 
 ## System Diagram
@@ -50,8 +48,8 @@ Each SubTurtle runs one autonomous loop:
 | Type | What it does | Typical use |
 |------|---------------|-------------|
 | `slow` | Plan -> Groom -> Execute -> Review | Complex multi-step work |
-| `yolo` | Single Claude call per iteration | Fast Claude-centric execution |
-| `yolo-codex` | Single Codex call per iteration | Default low-cost worker mode |
+| `yolo` | Single Claude call per iteration | Default for most tasks |
+| `yolo-codex` | Single Codex call per iteration | Cost-efficient worker mode |
 | `yolo-codex-spark` | Single Codex Spark call per iteration | Fastest Codex-based loops |
 
 See [SubTurtle Loop Types](/subturtles/loop-types) for details.
@@ -89,7 +87,7 @@ Super Turtle routes execution through a driver layer so workers can use either r
 - Claude Code: strongest reasoning and high-complexity workflows.
 - Codex: lower-cost, faster loops for straightforward implementation.
 
-`yolo-codex` is the default SubTurtle type, while the Meta Agent can switch drivers based on task complexity and quota signals.
+`yolo` (Claude Code) is the default SubTurtle type. The Meta Agent can switch to `yolo-codex` based on task complexity and quota signals.
 
 ## What's Next
 

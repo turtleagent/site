@@ -3,8 +3,6 @@ title: SubTurtle Loop Types
 description: Compare slow, yolo, yolo-codex, and yolo-codex-spark with speed, cost, and quality tradeoffs
 ---
 
-# SubTurtle Loop Types
-
 SubTurtles support four loop types:
 - `slow`
 - `yolo`
@@ -18,12 +16,12 @@ Choose loop type based on complexity, iteration speed, and quota pressure.
 | Type | Calls per iteration | Runtime | Best for |
 |------|---------------------|----------|----------|
 | `slow` | 4 calls (Plan -> Groom -> Execute -> Review) | Claude + Codex | Complex, high-risk multi-file work |
-| `yolo` | 1 call | Claude | Focused work that still benefits from Claude reasoning |
-| `yolo-codex` | 1 call | Codex | Default mode for most coding tasks |
+| `yolo` | 1 call | Claude | Default for most tasks |
+| `yolo-codex` | 1 call | Codex | Cost-efficient coding tasks |
 | `yolo-codex-spark` | 1 call | Codex Spark (`gpt-5.3-codex-spark`) | Fastest Codex iterations |
 
 <Info>
-`ctl spawn` and `ctl start` default to `--type yolo-codex`.
+`ctl spawn` and `ctl start` default to `--type yolo`.
 </Info>
 
 ## How Each Loop Executes
@@ -77,7 +75,7 @@ Tradeoff:
 ./super_turtle/subturtle/ctl spawn auth-fix --type yolo --timeout 1h --state-file /tmp/auth-fix.md
 ```
 
-### `yolo-codex` (Default)
+### `yolo-codex`
 
 `yolo-codex` is the same single-call loop model as `yolo`, but uses Codex.
 
@@ -114,14 +112,14 @@ Tradeoff:
 ## Selection Guide
 
 <Steps>
-  <Step title="Default to yolo-codex">
-    Start with `yolo-codex` for most tasks. It is the project default and best baseline for throughput.
+  <Step title="Default to yolo">
+    Start with `yolo` for most tasks. It is the project default and uses Claude Code.
   </Step>
   <Step title="Escalate to slow for complex work">
     If a task needs explicit planning/review or crosses many boundaries, switch to `slow`.
   </Step>
-  <Step title="Use yolo when Claude reasoning is preferred">
-    Pick `yolo` when you need Claude in a single-call loop (or Codex quota is high).
+  <Step title="Use yolo-codex for cost efficiency">
+    Pick `yolo-codex` when you want lower cost or Claude quota is constrained.
   </Step>
   <Step title="Use yolo-codex-spark for shortest feedback loops">
     Pick Spark for highly concrete work where rapid iterations matter most.
@@ -133,8 +131,8 @@ Tradeoff:
 | Priority | Recommended type | Why |
 |----------|------------------|-----|
 | Maximum quality checks | `slow` | Includes planning and review each iteration |
-| Balanced default | `yolo-codex` | Single-call loop + low-cost runtime |
-| Claude-first single-call | `yolo` | Faster than `slow`, Claude reasoning |
+| Balanced default | `yolo` | Single-call loop + Claude reasoning |
+| Cost-efficient | `yolo-codex` | Single-call loop + low-cost Codex runtime |
 | Maximum iteration speed | `yolo-codex-spark` | Spark model tuned for fast cycles |
 
 ## Operational Notes

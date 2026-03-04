@@ -1,19 +1,21 @@
 ---
-title: Super Turtle Docs
+title: superturtle docs
 description: Autonomous coding from Telegram with milestone-focused updates
 ---
 
-# Super Turtle Docs
+superturtle is an autonomous coding agent you control from Telegram. Send a voice message or text from your phone, and it runs Claude Code (or Codex) on your machine to write code, run tests, fix bugs, and ship features.
 
-Super Turtle is an autonomous coding system you control from Telegram.
-You describe outcomes, and the system handles decomposition, execution,
-and supervision.
+```bash
+npm install -g superturtle
+superturtle init
+superturtle start
+```
 
 <Warning>
-Platform status: macOS is fully supported, Linux is untested alpha, and Windows is not an officially supported setup target right now. See [Platform Support](/config/platform-support).
+macOS is fully supported. Linux is alpha. Windows is not yet supported. See [Platform Support](/config/platform-support).
 </Warning>
 
-## Start Here
+## Start here
 
 <CardGroup cols={3}>
   <Card
@@ -21,30 +23,26 @@ Platform status: macOS is fully supported, Linux is untested alpha, and Windows 
     href="/introduction"
     icon="sparkles"
   >
-    What Super Turtle is and how the Meta Agent + SubTurtle model works.
+    What superturtle is and how Meta Agent + SubTurtles work.
   </Card>
   <Card
     title="Quickstart"
     href="/quickstart"
     icon="rocket"
   >
-    Set up in minutes with the guided install flow.
+    Install, init, start. Up and running in minutes.
   </Card>
   <Card
     title="Architecture"
     href="/architecture"
     icon="diagram-project"
   >
-    Understand orchestration, loop types, and supervision.
+    Orchestration, loop types, and supervision.
   </Card>
 </CardGroup>
 
-## Key Principles
+## Key principles
 
-- Outcome-first UX: milestone updates, minimal noise
-- Autonomous execution: SubTurtles run and recover without micromanagement
-- Cost-aware routing: defaults to `yolo-codex`, escalates only when needed
-
-## Continue
-
-Begin with [Introduction](/introduction), then follow [Quickstart](/quickstart).
+- **Outcome-first UX** — milestone updates, minimal noise
+- **Autonomous execution** — SubTurtles run and recover without micromanagement
+- **Uses your subscriptions** — Claude Code and optionally Codex, no extra API tokens

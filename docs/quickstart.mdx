@@ -1,73 +1,85 @@
 ---
 title: Quickstart
-description: Get Super Turtle running with guided onboarding
+description: Install superturtle and get your Telegram bot running
 ---
-
-# Quickstart
-
-Super Turtle setup is agent-guided. You do not need to manually wire config files.
 
 ## Prerequisites
 
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated
-- A machine you can keep awake while the bot runs (macOS is fully supported; Linux is untested alpha)
-
-You do **not** need a Telegram token in advance. The onboarding agent will walk you through creating one.
+- [Bun](https://bun.sh) >= 1.0
+- [tmux](https://github.com/tmux/tmux) — `brew install tmux`
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed and authenticated
+- [Telegram](https://telegram.org/) on your phone or desktop
 
 <Warning>
-Before running setup, check [Platform Support](/config/platform-support). macOS is fully supported; Linux is untested alpha.
+macOS is fully supported. Linux is alpha. See [Platform Support](/config/platform-support).
 </Warning>
 
-## Setup
+## Install
 
 <Steps>
-  <Step title="Clone the repo">
+  <Step title="Install superturtle">
     ```bash
-    git clone https://github.com/Rigos0/superturtle.git
-    cd superturtle
+    npm install -g superturtle
     ```
   </Step>
 
-  <Step title="Open Claude Code">
+  <Step title="Run the setup wizard">
     ```bash
-    claude
+    superturtle init
     ```
+
+    The wizard walks you through:
+    1. Creating a Telegram bot via `@BotFather`
+    2. Getting your Telegram user ID via `@userinfobot`
+    3. Optionally enabling voice transcription (requires `OPENAI_API_KEY`)
+
+    Config is saved to `.superturtle/.env`.
   </Step>
 
-  <Step title="Prompt the onboarding flow">
-    ```text
-    Set up Super Turtle for me.
+  <Step title="Start the bot">
+    ```bash
+    superturtle start
     ```
+
+    This opens a tmux session called `superturtle-bot`. The bot survives terminal disconnects.
+
+    - Re-attach: `tmux attach -t superturtle-bot`
+    - Stop: `superturtle stop`
+    - Status: `superturtle status`
+  </Step>
+
+  <Step title="Verify in Telegram">
+    Open Telegram, find your bot, and send any message. You should get a response.
   </Step>
 </Steps>
 
-## What the onboarding agent should do
+### Non-interactive setup
 
-The onboarding flow should be fully guided and step-by-step:
+For CI or scripted environments, pass flags directly:
 
-1. Guide BotFather flow (`@BotFather` -> `/newbot`) and collect token.
-2. Guide Telegram user ID flow (`@userinfobot`) and collect numeric ID.
-3. Ask whether to enable voice transcription, optionally collect `OPENAI_API_KEY`.
-4. Run setup command:
-   - `./super_turtle/setup --driver claude --telegram-token "<token>" --telegram-user "<id>"`
-   - Add `--openai-api-key "<key>"` if provided.
-5. Start bot:
-   - `cd super_turtle/claude-telegram-bot && bun run start`
-6. Ask user to send `/start` (or any message) in Telegram and confirm response.
+```bash
+superturtle init --token <BOT_TOKEN> --user <TELEGRAM_USER_ID> --openai-key <KEY>
+```
 
-If the environment supports it, onboarding should use interactive choice prompts (for example via `ask_user`) for yes/no decisions.
+## Development setup
 
-<Warning>
-Do not commit `super_turtle/claude-telegram-bot/.env`. It contains local credentials.
-</Warning>
+If you're contributing to superturtle itself:
 
-## Reliability notes for Mac laptops
+```bash
+git clone https://github.com/Rigos0/superturtle.git
+cd superturtle
+node super_turtle/bin/superturtle.js init
+cd super_turtle/claude-telegram-bot
+bun run start
+```
 
-- Enable `System Settings -> Battery -> Options -> Prevent automatic sleeping when the display is off` (on power adapter).
+## Mac reliability notes
+
+- Enable `System Settings > Battery > Options > Prevent automatic sleeping when the display is off` (on power adapter).
 - Keep the lid open while the bot is running.
 
 ## What's next
 
-- [Introduction](/introduction)
-- [Architecture](/architecture)
-- [Telegram Bot Overview](/bot/overview)
+- [Architecture](/architecture) — how Meta Agent and SubTurtles coordinate
+- [Bot Commands](/bot/commands) — full command reference
+- [Drivers](/bot/drivers) — Claude Code vs Codex
