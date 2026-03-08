@@ -71,71 +71,6 @@ CODEX_ENABLED=true
 
 Default: `false`. Requires active Codex CLI and CLOTH subscription.
 
-## Default Models & Effort
-
-These values seed fresh driver preferences only. Once a user changes model or effort in Telegram, the saved preference wins over the env default.
-
-### DEFAULT_CLAUDE_MODEL
-
-Default Claude model for new users / empty preference files.
-
-```bash
-DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
-```
-
-Options:
-- `claude-opus-4-6`
-- `claude-sonnet-4-6`
-- `claude-haiku-4-5-20251001`
-
-Default: `claude-opus-4-6`
-
-### DEFAULT_CLAUDE_EFFORT
-
-Default Claude effort level for new users / empty preference files.
-
-```bash
-DEFAULT_CLAUDE_EFFORT=medium
-```
-
-Options:
-- `low`
-- `medium`
-- `high`
-
-Default: `high`
-
-### DEFAULT_CODEX_MODEL
-
-Default Codex model for new users / empty preference files.
-
-```bash
-DEFAULT_CODEX_MODEL=gpt-5.3-codex-spark
-```
-
-Options:
-- `gpt-5.3-codex`
-- `gpt-5.3-codex-spark`
-
-Default: `gpt-5.3-codex`
-
-### DEFAULT_CODEX_EFFORT
-
-Default Codex reasoning effort for new users / empty preference files.
-
-```bash
-DEFAULT_CODEX_EFFORT=low
-```
-
-Options:
-- `minimal`
-- `low`
-- `medium`
-- `high`
-- `xhigh`
-
-Default: `medium`
-
 ### META_CODEX_SANDBOX_MODE
 
 Sandbox restrictions for Codex SubTurtles.
@@ -213,23 +148,23 @@ Default: `false`. Logs as text instead.
 
 ### RATE_LIMIT_ENABLED
 
-Enable token bucket rate limiting.
+Enable per-user inbound Telegram request throttling.
 
 ```bash
 RATE_LIMIT_ENABLED=true
 ```
 
-Default: `true`. Prevents abuse.
+Default: `true`. This applies a token bucket before the bot starts processing text, voice, and file messages.
 
 ### RATE_LIMIT_REQUESTS
 
-Number of requests allowed per window.
+How many inbound requests each Telegram user can send per window.
 
 ```bash
 RATE_LIMIT_REQUESTS=20
 ```
 
-Default: `20` requests. Increase if you use the bot heavily.
+Default: `20` requests. Increase it if you expect a heavier personal usage pattern.
 
 ### RATE_LIMIT_WINDOW
 
@@ -239,7 +174,7 @@ Time window in seconds.
 RATE_LIMIT_WINDOW=60
 ```
 
-Default: `60` seconds. So by default: 20 requests per 60 seconds = 1 request every 3 seconds.
+Default: `60` seconds. With the defaults, each user gets 20 inbound requests per 60 seconds.
 
 ## Voice Transcription
 
@@ -326,6 +261,71 @@ CLAUDE_CLI_PATH=/opt/homebrew/bin/claude
 
 Usually auto-detected. Set only if `claude` command is not in your PATH.
 
+## Default Models & Effort
+
+These values seed fresh driver preferences only. Once a user changes model or effort in Telegram, the saved preference wins over the env default.
+
+### DEFAULT_CLAUDE_MODEL
+
+Default Claude model for new users / empty preference files.
+
+```bash
+DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
+```
+
+Options:
+- `claude-opus-4-6`
+- `claude-sonnet-4-6`
+- `claude-haiku-4-5-20251001`
+
+Default: `claude-opus-4-6`
+
+### DEFAULT_CLAUDE_EFFORT
+
+Default Claude effort level for new users / empty preference files.
+
+```bash
+DEFAULT_CLAUDE_EFFORT=medium
+```
+
+Options:
+- `low`
+- `medium`
+- `high`
+
+Default: `high`
+
+### DEFAULT_CODEX_MODEL
+
+Default Codex model for new users / empty preference files.
+
+```bash
+DEFAULT_CODEX_MODEL=gpt-5.3-codex-spark
+```
+
+Options:
+- `gpt-5.3-codex`
+- `gpt-5.3-codex-spark`
+
+Default: `gpt-5.3-codex`
+
+### DEFAULT_CODEX_EFFORT
+
+Default Codex reasoning effort for new users / empty preference files.
+
+```bash
+DEFAULT_CODEX_EFFORT=low
+```
+
+Options:
+- `minimal`
+- `low`
+- `medium`
+- `high`
+- `xhigh`
+
+Default: `medium`
+
 ## Configuration Groups
 
 ### Minimal Setup
@@ -345,6 +345,8 @@ Good for local testing:
 TELEGRAM_BOT_TOKEN=your-token
 TELEGRAM_ALLOWED_USERS=your-id
 CLAUDE_WORKING_DIR=~/my-dev-folder
+DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
+DEFAULT_CLAUDE_EFFORT=medium
 RATE_LIMIT_REQUESTS=100
 OPENAI_API_KEY=your-key
 ```
@@ -357,6 +359,8 @@ Full-featured personal use:
 TELEGRAM_BOT_TOKEN=your-token
 TELEGRAM_ALLOWED_USERS=your-id
 CLAUDE_WORKING_DIR=~/my-assistant
+DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
+DEFAULT_CLAUDE_EFFORT=medium
 ALLOWED_PATHS=~/my-assistant,~/Documents/Notes,~/.claude
 OPENAI_API_KEY=your-key
 AUDIT_LOG_PATH=/tmp/claude-telegram-audit.log
@@ -372,9 +376,13 @@ Full setup with both drivers:
 TELEGRAM_BOT_TOKEN=your-token
 TELEGRAM_ALLOWED_USERS=your-id,other-id
 CLAUDE_WORKING_DIR=/var/lib/claude-assistant
+DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
+DEFAULT_CLAUDE_EFFORT=medium
 ALLOWED_PATHS=/var/lib/claude-assistant,/home/user/Documents,~/.claude
 OPENAI_API_KEY=your-key
 CODEX_ENABLED=true
+DEFAULT_CODEX_MODEL=gpt-5.3-codex-spark
+DEFAULT_CODEX_EFFORT=low
 META_CODEX_SANDBOX_MODE=workspace-write
 META_CODEX_APPROVAL_POLICY=never
 AUDIT_LOG_PATH=/var/log/claude-telegram.log
@@ -394,6 +402,8 @@ TELEGRAM_ALLOWED_USERS=123456789
 # ============ Recommended ============
 CLAUDE_WORKING_DIR=~/my-assistant
 OPENAI_API_KEY=sk-proj-1234567890abcdef
+DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
+DEFAULT_CLAUDE_EFFORT=medium
 
 # ============ File Access ============
 ALLOWED_PATHS=~/my-assistant,~/Documents/Notes,~/.claude
@@ -410,6 +420,8 @@ TRANSCRIPTION_CONTEXT_FILE=~/my-assistant/transcription-context.txt
 
 # ============ Codex (Optional) ============
 # CODEX_ENABLED=true
+# DEFAULT_CODEX_MODEL=gpt-5.3-codex-spark
+# DEFAULT_CODEX_EFFORT=low
 # META_CODEX_SANDBOX_MODE=workspace-write
 # META_CODEX_APPROVAL_POLICY=never
 # META_CODEX_NETWORK_ACCESS=false
