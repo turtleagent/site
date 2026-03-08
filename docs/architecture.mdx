@@ -83,10 +83,10 @@ This keeps intent human-readable while lifecycle/delivery truth remains machine-
 
 ## Cron Supervision
 
-`ctl spawn` automatically registers recurring supervision jobs in `super_turtle/claude-telegram-bot/cron-jobs.json`, but cron is now a trigger path, not the source of truth.
+`ctl spawn` automatically registers recurring supervision jobs in `super_turtle/claude-telegram-bot/cron-jobs.json`.
 
 - Jobs are marked `silent: true` by default for low-noise operation.
-- Check-ins run deterministic policy over canonical conductor state.
+- Check-ins review worker progress and only surface meaningful updates.
 - Interval is configurable (`--cron-interval` on spawn, `ctl reschedule-cron` later).
 
 The default spawn interval is 10 minutes, and it can be tightened or relaxed as workload changes.
