@@ -144,38 +144,6 @@ AUDIT_LOG_JSON=true
 
 Default: `false`. Logs as text instead.
 
-## Rate Limiting
-
-### RATE_LIMIT_ENABLED
-
-Enable per-user inbound Telegram request throttling.
-
-```bash
-RATE_LIMIT_ENABLED=true
-```
-
-Default: `true`. This applies a token bucket before the bot starts processing text, voice, and file messages.
-
-### RATE_LIMIT_REQUESTS
-
-How many inbound requests each Telegram user can send per window.
-
-```bash
-RATE_LIMIT_REQUESTS=20
-```
-
-Default: `20` requests. Increase it if you expect a heavier personal usage pattern.
-
-### RATE_LIMIT_WINDOW
-
-Time window in seconds.
-
-```bash
-RATE_LIMIT_WINDOW=60
-```
-
-Default: `60` seconds. With the defaults, each user gets 20 inbound requests per 60 seconds.
-
 ## Voice Transcription
 
 ### TRANSCRIPTION_CONTEXT_FILE
@@ -430,6 +398,38 @@ TRANSCRIPTION_CONTEXT_FILE=~/my-assistant/transcription-context.txt
 # DASHBOARD_ENABLED=true
 # DASHBOARD_PORT=46123
 ```
+
+## Rate Limiting
+
+### RATE_LIMIT_ENABLED
+
+Enable per-user inbound Telegram request throttling.
+
+```bash
+RATE_LIMIT_ENABLED=true
+```
+
+Default: `true`. This applies a token bucket before the bot starts processing text, voice, and file messages.
+
+### RATE_LIMIT_REQUESTS
+
+How many inbound requests each Telegram user can send per window.
+
+```bash
+RATE_LIMIT_REQUESTS=20
+```
+
+Default: `20` requests. Increase it if you expect a heavier personal usage pattern.
+
+### RATE_LIMIT_WINDOW
+
+Time window in seconds.
+
+```bash
+RATE_LIMIT_WINDOW=60
+```
+
+Default: `60` seconds. With the defaults, each user gets 20 inbound requests per 60 seconds.
 
 ## Validation
 
