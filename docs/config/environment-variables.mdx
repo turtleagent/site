@@ -230,10 +230,10 @@ Default: `true`. Runs the local web dashboard unless explicitly disabled.
 Port for the dashboard.
 
 ```bash
-DASHBOARD_PORT=46321
+DASHBOARD_PORT=46123
 ```
 
-Default: stable token-derived port in the `46000-46999` range. This avoids collisions when multiple local Super Turtle instances run on one machine.
+Default: auto-selected at runtime. Super Turtle prints the exact dashboard URL/port on startup. Set `DASHBOARD_PORT` only if you want to pin a fixed local port.
 
 ### DASHBOARD_BIND_ADDR
 
@@ -369,7 +369,7 @@ THINKING_DEEP_KEYWORDS=ultrathink,think hard
 
 # ============ Dashboard (Optional) ============
 # DASHBOARD_ENABLED=true
-# DASHBOARD_PORT=46321
+# DASHBOARD_PORT=46123
 ```
 
 ## Validation
