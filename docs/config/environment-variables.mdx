@@ -41,7 +41,11 @@ Default working directory for Claude. Claude can access files and run commands f
 CLAUDE_WORKING_DIR=~/my-assistant
 ```
 
-If not set, defaults to home directory (`~`).
+`superturtle start` sets this automatically to the current project directory.
+
+If you run the bot directly with `bun run start`, set `CLAUDE_WORKING_DIR` in your shell first so the launcher can find `CLAUDE_WORKING_DIR/.superturtle/.env`.
+
+If not set, the runtime defaults to home directory (`~`), but direct launcher behavior may fall back to the legacy bot-dir `.env`.
 
 ### OPENAI_API_KEY
 
@@ -66,6 +70,71 @@ CODEX_ENABLED=true
 ```
 
 Default: `false`. Requires active Codex CLI and CLOTH subscription.
+
+## Default Models & Effort
+
+These values seed fresh driver preferences only. Once a user changes model or effort in Telegram, the saved preference wins over the env default.
+
+### DEFAULT_CLAUDE_MODEL
+
+Default Claude model for new users / empty preference files.
+
+```bash
+DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
+```
+
+Options:
+- `claude-opus-4-6`
+- `claude-sonnet-4-6`
+- `claude-haiku-4-5-20251001`
+
+Default: `claude-opus-4-6`
+
+### DEFAULT_CLAUDE_EFFORT
+
+Default Claude effort level for new users / empty preference files.
+
+```bash
+DEFAULT_CLAUDE_EFFORT=medium
+```
+
+Options:
+- `low`
+- `medium`
+- `high`
+
+Default: `high`
+
+### DEFAULT_CODEX_MODEL
+
+Default Codex model for new users / empty preference files.
+
+```bash
+DEFAULT_CODEX_MODEL=gpt-5.3-codex-spark
+```
+
+Options:
+- `gpt-5.3-codex`
+- `gpt-5.3-codex-spark`
+
+Default: `gpt-5.3-codex`
+
+### DEFAULT_CODEX_EFFORT
+
+Default Codex reasoning effort for new users / empty preference files.
+
+```bash
+DEFAULT_CODEX_EFFORT=low
+```
+
+Options:
+- `minimal`
+- `low`
+- `medium`
+- `high`
+- `xhigh`
+
+Default: `medium`
 
 ### META_CODEX_SANDBOX_MODE
 

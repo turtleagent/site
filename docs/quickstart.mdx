@@ -69,8 +69,26 @@ If you're contributing to superturtle itself:
 git clone https://github.com/Rigos0/superturtle.git
 cd superturtle
 node super_turtle/bin/superturtle.js init
+export CLAUDE_WORKING_DIR=$(pwd)
 cd super_turtle/claude-telegram-bot
 bun run start
+```
+
+Why the export?
+
+- `bun run start` goes through the bot launcher directly, so it needs `CLAUDE_WORKING_DIR` up front to locate `.superturtle/.env`
+- `superturtle start` sets `CLAUDE_WORKING_DIR` for you automatically, but the globally installed CLI may not point at your current working tree during local development
+
+Optional defaults for testing model configuration:
+
+```bash
+cat >> .superturtle/.env <<'EOF'
+DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
+DEFAULT_CLAUDE_EFFORT=medium
+CODEX_ENABLED=true
+DEFAULT_CODEX_MODEL=gpt-5.3-codex-spark
+DEFAULT_CODEX_EFFORT=low
+EOF
 ```
 
 ## Mac reliability notes
