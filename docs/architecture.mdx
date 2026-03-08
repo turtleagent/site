@@ -3,7 +3,16 @@ title: Architecture
 description: How Super Turtle coordinates work across agents and drivers
 ---
 
-Super Turtle is a local multi-agent system controlled from Telegram. A single Meta Agent handles conversation, planning, and supervision. It can spawn SubTurtles to execute work in parallel and route loops through Claude Code or Codex.
+Super Turtle is a local multi-agent system orchestrated by one Meta Agent. The Meta Agent owns planning and supervision, delegates execution to SubTurtles, receives requests via Telegram, and exposes operational state in the local dashboard.
+
+## Control-Plane Order
+
+Use this mental model when reading the system docs:
+
+1. **Meta Agent** decides strategy and delegation.
+2. **SubTurtles** execute scoped work and emit durable lifecycle facts.
+3. **Telegram Bot** is the operator interaction surface.
+4. **Dashboard** is the local observability surface over runtime + conductor state.
 
 ## System Diagram
 
@@ -31,7 +40,7 @@ flowchart TD
 
 ## Meta Agent
 
-The Meta Agent is the single interface you talk to. It:
+The Meta Agent is the orchestrator, not just a chat interface. It:
 
 - Interprets requests from Telegram.
 - Decomposes larger tasks into parallelizable units.

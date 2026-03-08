@@ -29,13 +29,23 @@ workers in parallel, and report progress at milestone level.
 
 ## Core Experience
 
-1. You send a text or voice message in Telegram.
-2. The Meta Agent interprets intent and decides whether to do the task directly
+1. The Meta Agent interprets intent and decides whether to do the task directly
 or spawn SubTurtles.
-3. SubTurtles execute in autonomous loops, update state, and commit progress.
-4. Cron supervision checks background work silently and notifies you only on
-meaningful changes (milestones, completion, stuck states, or errors).
+2. SubTurtles execute autonomous coding loops, update state, and commit progress.
+3. Telegram remains the control surface where you send requests and receive
+milestone/completion updates.
+4. The local dashboard exposes operational state (sessions, lanes, queue,
+conductor workers/wakeups/inbox) for observability.
 5. You stay in one conversation while the system manages orchestration.
+
+## System Flow
+
+The docs follow this operational order:
+
+1. **Meta Agent** — planning, decomposition, supervision policy
+2. **SubTurtles** — parallel worker execution and state progression
+3. **Telegram Bot** — user interaction surface and driver runtime
+4. **Dashboard** — local observability and conductor state visibility
 
 Silence means progress. You should only get interrupted when it matters.
 
