@@ -1,0 +1,40 @@
+---
+title: Conductor Panel + API
+description: Durable worker lifecycle state, wakeups, and inbox visibility
+---
+
+Super Turtle orchestration now uses a durable conductor state model.
+The dashboard reads that state directly so restart/recovery visibility does not depend on chat context.
+
+## Canonical State Paths
+
+Conductor data is persisted under:
+
+- `.superturtle/state/events.jsonl`
+- `.superturtle/state/workers/`
+- `.superturtle/state/wakeups/`
+- `.superturtle/state/inbox/`
+
+`handoff.md` and legacy summaries are rendered from this canonical state.
+
+## `/api/conductor`
+
+The conductor API exposes a machine-readable snapshot:
+
+- `workers` — active + recent worker lifecycle records (`run_id`, `lifecycle_state`, checkpoint metadata)
+- `wakeups` — pending delivery items (completion, failure, milestone, timeout)
+- `inbox` — pending meta-agent background context items
+
+This is the same data source used by dashboard panels and worker detail pages.
+
+## Why This Matters
+
+- Worker completion/failure survives bot restarts
+- Wakeups can be replayed if delivery was interrupted
+- Multi-worker supervision is deterministic and auditable
+- Driver/model switches do not lose background worker updates
+
+## Related
+
+- [Long-run state design](https://github.com/Rigos0/superturtle/blob/dev/super_turtle/docs/long-run-state-tracking.md)
+- [Dashboard Overview](/dashboard/overview)

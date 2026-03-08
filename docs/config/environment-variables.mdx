@@ -223,17 +223,17 @@ Enable the bot's web dashboard.
 DASHBOARD_ENABLED=true
 ```
 
-Default: `false`. If enabled, runs a web UI on `DASHBOARD_PORT`.
+Default: `true`. Runs the local web dashboard unless explicitly disabled.
 
 ### DASHBOARD_PORT
 
 Port for the dashboard.
 
 ```bash
-DASHBOARD_PORT=4173
+DASHBOARD_PORT=46321
 ```
 
-Default: `4173`. Change if this port is already in use.
+Default: stable token-derived port in the `46000-46999` range. This avoids collisions when multiple local Super Turtle instances run on one machine.
 
 ### DASHBOARD_BIND_ADDR
 
@@ -243,7 +243,7 @@ Address to bind the dashboard to.
 DASHBOARD_BIND_ADDR=127.0.0.1
 ```
 
-Default: `127.0.0.1` (localhost only). Use `0.0.0.0` to allow external access (not recommended for security reasons).
+Default: `127.0.0.1` (localhost only).
 
 ### DASHBOARD_HOST
 
@@ -253,7 +253,7 @@ Dashboard URL shown in responses.
 DASHBOARD_HOST=https://dashboard.example.com
 ```
 
-Default: `http://localhost`. Set if dashboard is behind a reverse proxy or accessible via HTTPS.
+Default: `http://localhost`. If no port is included, Super Turtle appends the active dashboard port when rendering links.
 
 ### DASHBOARD_AUTH_TOKEN
 
@@ -263,7 +263,7 @@ Authentication token for dashboard access.
 DASHBOARD_AUTH_TOKEN=your-secret-token
 ```
 
-Optional. If set, dashboard requires this token in the `Authorization: Bearer` header.
+Optional. For local-only usage, leave unset. If set, dashboard requires this token (`Authorization: Bearer <token>`, `x-dashboard-token`, or `?token=`).
 
 ## Advanced Configuration
 
@@ -368,8 +368,8 @@ THINKING_DEEP_KEYWORDS=ultrathink,think hard
 # META_CODEX_NETWORK_ACCESS=false
 
 # ============ Dashboard (Optional) ============
-# DASHBOARD_ENABLED=false
-# DASHBOARD_PORT=4173
+# DASHBOARD_ENABLED=true
+# DASHBOARD_PORT=46321
 ```
 
 ## Validation

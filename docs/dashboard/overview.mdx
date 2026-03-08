@@ -1,0 +1,35 @@
+---
+title: Dashboard Overview
+description: Local operational dashboard for sessions, workers, and runtime health
+---
+
+The Super Turtle dashboard is a local operational UI exposed by the bot at `/dashboard`.
+It is designed for operator visibility, not as a public product surface.
+
+## What It Shows
+
+- Driver/session state (active driver, saved sessions, recent turns)
+- SubTurtle race lanes with lifecycle + backlog progress
+- Current jobs and scheduled cron jobs
+- Deferred queue pressure (queued voice/text work)
+- Conductor snapshot (`workers`, `wakeups`, `inbox`)
+
+## Local-Only Model
+
+By default, the dashboard binds to `127.0.0.1` and is intended for the same machine where the bot runs.
+If you expose it through a tunnel or reverse proxy, set `DASHBOARD_AUTH_TOKEN` and treat it as sensitive operational access.
+
+## Main Endpoints
+
+- `/dashboard` — HTML dashboard view
+- `/api/dashboard/overview` — aggregate dashboard payload
+- `/api/dashboard` — raw dashboard state
+- `/api/conductor` — conductor state snapshot
+- `/api/queue` — deferred queue state
+- `/api/cron` — scheduled cron jobs
+- `/api/jobs/current` — currently active jobs
+
+## Related
+
+- [Conductor Panel + API](/dashboard/conductor)
+- [Environment Variables](/config/environment-variables)

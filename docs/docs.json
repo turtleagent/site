@@ -64,6 +64,18 @@
         ]
       },
       {
+        "tab": "Dashboard",
+        "groups": [
+          {
+            "group": "Dashboard",
+            "pages": [
+              "dashboard/overview",
+              "dashboard/conductor"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Meta Agent",
         "groups": [
           {

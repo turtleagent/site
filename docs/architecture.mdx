@@ -56,10 +56,12 @@ See [SubTurtle Loop Types](/subturtles/loop-types) for details.
 
 ## State Management
 
-State is markdown-first and lives in `CLAUDE.md` files:
+Task intent is markdown-first and lives in `CLAUDE.md` files:
 
 - Project-level state in the repo root.
 - Per-worker state in `.subturtles/<name>/CLAUDE.md`.
+
+Durable orchestration state is conductor-first and lives under `.superturtle/state/` (`workers`, `wakeups`, `inbox`, `events.jsonl`).
 
 The backlog in each file is the execution contract for that run. A SubTurtle exits when it appends:
 
@@ -68,14 +70,14 @@ The backlog in each file is the execution contract for that run. A SubTurtle exi
 STOP
 ```
 
-This keeps handoff and supervision human-readable while still machine-checkable.
+This keeps intent human-readable while lifecycle/delivery truth remains machine-checkable.
 
 ## Cron Supervision
 
-`ctl spawn` automatically registers recurring supervision jobs in `super_turtle/claude-telegram-bot/cron-jobs.json`.
+`ctl spawn` automatically registers recurring supervision jobs in `super_turtle/claude-telegram-bot/cron-jobs.json`, but cron is now a trigger path, not the source of truth.
 
 - Jobs are marked `silent: true` by default for low-noise operation.
-- Check-ins focus on milestone detection and stuck/error states.
+- Check-ins run deterministic policy over canonical conductor state.
 - Interval is configurable (`--cron-interval` on spawn, `ctl reschedule-cron` later).
 
 The default spawn interval is 10 minutes, and it can be tightened or relaxed as workload changes.
