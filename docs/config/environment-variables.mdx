@@ -193,26 +193,6 @@ This person discusses:
 - Personal interests: Sim racing, fitness, photography
 ```
 
-### THINKING_KEYWORDS
-
-Comma-separated keywords that trigger extended thinking.
-
-```bash
-THINKING_KEYWORDS=think,pensa,ragiona
-```
-
-Default: `think,pensa,ragiona`. When Claude hears these words, it uses extended thinking (slow reasoning mode).
-
-### THINKING_DEEP_KEYWORDS
-
-Keywords that trigger deep extended thinking (high effort).
-
-```bash
-THINKING_DEEP_KEYWORDS=ultrathink,think hard,pensa bene
-```
-
-Default: `ultrathink,think hard,pensa bene`. These trigger maximum reasoning effort.
-
 ## Dashboard (Optional)
 
 ### DASHBOARD_ENABLED
@@ -310,7 +290,6 @@ TELEGRAM_ALLOWED_USERS=your-id
 CLAUDE_WORKING_DIR=~/my-assistant
 ALLOWED_PATHS=~/my-assistant,~/Documents/Notes,~/.claude
 OPENAI_API_KEY=your-key
-THINKING_KEYWORDS=think,pensa,analyze
 AUDIT_LOG_PATH=/tmp/claude-telegram-audit.log
 RATE_LIMIT_ENABLED=true
 RATE_LIMIT_REQUESTS=50
@@ -358,8 +337,7 @@ RATE_LIMIT_REQUESTS=20
 RATE_LIMIT_WINDOW=60
 
 # ============ Voice ============
-THINKING_KEYWORDS=think,pensa,analyze
-THINKING_DEEP_KEYWORDS=ultrathink,think hard
+TRANSCRIPTION_CONTEXT_FILE=~/my-assistant/transcription-context.txt
 
 # ============ Codex (Optional) ============
 # CODEX_ENABLED=true
