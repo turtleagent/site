@@ -177,36 +177,6 @@ DASHBOARD_ENABLED=true
 
 Default: `true`. Runs the local web dashboard unless explicitly disabled.
 
-### DASHBOARD_PORT
-
-Port for the dashboard.
-
-```bash
-DASHBOARD_PORT=46123
-```
-
-Default: auto-selected at runtime. Super Turtle prints the exact dashboard URL/port on startup. Set `DASHBOARD_PORT` only if you want to pin a fixed local port.
-
-### DASHBOARD_BIND_ADDR
-
-Address to bind the dashboard to.
-
-```bash
-DASHBOARD_BIND_ADDR=127.0.0.1
-```
-
-Default: `127.0.0.1` (localhost only).
-
-### DASHBOARD_HOST
-
-Dashboard URL shown in responses.
-
-```bash
-DASHBOARD_HOST=https://dashboard.example.com
-```
-
-Default: `http://localhost`. If no port is included, Super Turtle appends the active dashboard port when rendering links.
-
 ### DASHBOARD_AUTH_TOKEN
 
 Authentication token for dashboard access.
@@ -396,7 +366,7 @@ TRANSCRIPTION_CONTEXT_FILE=~/my-assistant/transcription-context.txt
 
 # ============ Dashboard (Optional) ============
 # DASHBOARD_ENABLED=true
-# DASHBOARD_PORT=46123
+# DASHBOARD_AUTH_TOKEN=your-secret-token
 ```
 
 ## Rate Limiting
