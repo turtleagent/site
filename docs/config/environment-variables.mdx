@@ -59,6 +59,16 @@ Get from [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 
 Voice transcription won't work without this, but other features are unaffected.
 
+### SHOW_TOOL_STATUS
+
+Show routine tool-call progress messages in Telegram while an answer runs.
+
+```bash
+SHOW_TOOL_STATUS=false
+```
+
+Default: `false`. Keep this at `false` for quieter chats; set it to `true` only if you want the old per-tool progress updates back.
+
 ## Codex
 
 ### CODEX_ENABLED
@@ -283,6 +293,7 @@ Good for local testing:
 TELEGRAM_BOT_TOKEN=your-token
 TELEGRAM_ALLOWED_USERS=your-id
 CLAUDE_WORKING_DIR=~/my-dev-folder
+SHOW_TOOL_STATUS=false
 DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
 DEFAULT_CLAUDE_EFFORT=medium
 RATE_LIMIT_REQUESTS=100
@@ -297,6 +308,7 @@ Full-featured personal use:
 TELEGRAM_BOT_TOKEN=your-token
 TELEGRAM_ALLOWED_USERS=your-id
 CLAUDE_WORKING_DIR=~/my-assistant
+SHOW_TOOL_STATUS=false
 DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
 DEFAULT_CLAUDE_EFFORT=medium
 ALLOWED_PATHS=~/my-assistant,~/Documents/Notes,~/.claude
@@ -340,6 +352,7 @@ TELEGRAM_ALLOWED_USERS=123456789
 # ============ Recommended ============
 CLAUDE_WORKING_DIR=~/my-assistant
 OPENAI_API_KEY=sk-proj-1234567890abcdef
+SHOW_TOOL_STATUS=false
 DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
 DEFAULT_CLAUDE_EFFORT=medium
 
