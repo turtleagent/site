@@ -68,16 +68,12 @@ If you're contributing to superturtle itself:
 ```bash
 git clone https://github.com/Rigos0/superturtle.git
 cd superturtle
-node super_turtle/bin/superturtle.js init
-export CLAUDE_WORKING_DIR=$(pwd)
+npx superturtle init
 cd super_turtle/claude-telegram-bot
 bun run start
 ```
 
-Why the export?
-
-- `bun run start` goes through the bot launcher directly, so it needs `CLAUDE_WORKING_DIR` up front to locate `.superturtle/.env`
-- `superturtle start` sets `CLAUDE_WORKING_DIR` for you automatically, but the globally installed CLI may not point at your current working tree during local development
+`superturtle init` installs dependencies, creates `.superturtle/.env`, and prompts for your tokens. Then run the bot directly with `bun run start` from the bot directory.
 
 Optional defaults for testing model configuration:
 
