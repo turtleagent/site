@@ -69,6 +69,28 @@ SHOW_TOOL_STATUS=false
 
 Default: `false`. Keep this at `false` for quieter chats; set it to `true` only if you want the old per-tool progress updates back.
 
+### MAIN_PROVIDER
+
+Startup default driver for the Telegram meta-agent.
+
+```bash
+MAIN_PROVIDER=claude
+```
+
+Options:
+- `claude`
+- `codex`
+
+Default: `claude`.
+
+This is a startup default, not a forced override. Effective precedence is:
+
+1. Saved last-used driver from Telegram
+2. `MAIN_PROVIDER`
+3. Built-in fallback `claude`
+
+That means `/restart` keeps the user's last selected driver. If you set `MAIN_PROVIDER=codex`, you must also set `CODEX_ENABLED=true` and have a working local `codex` CLI; otherwise startup falls back to Claude.
+
 ## Codex
 
 ### CODEX_ENABLED
@@ -211,7 +233,7 @@ Usually auto-detected. Set only if `claude` command is not in your PATH.
 
 ## Default Models & Effort
 
-These values seed fresh driver preferences only. Once a user changes model or effort in Telegram, the saved preference wins over the env default.
+These values seed fresh driver preferences only. Once a user changes model, effort, or driver in Telegram, the saved preference wins over the env default.
 
 ### DEFAULT_CLAUDE_MODEL
 
@@ -353,6 +375,7 @@ TELEGRAM_ALLOWED_USERS=123456789
 CLAUDE_WORKING_DIR=~/my-assistant
 OPENAI_API_KEY=sk-proj-1234567890abcdef
 SHOW_TOOL_STATUS=false
+MAIN_PROVIDER=claude
 DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
 DEFAULT_CLAUDE_EFFORT=medium
 
@@ -371,6 +394,7 @@ TRANSCRIPTION_CONTEXT_FILE=~/my-assistant/transcription-context.txt
 
 # ============ Codex (Optional) ============
 # CODEX_ENABLED=true
+# MAIN_PROVIDER=codex
 # DEFAULT_CODEX_MODEL=gpt-5.3-codex-spark
 # DEFAULT_CODEX_EFFORT=low
 # META_CODEX_SANDBOX_MODE=workspace-write
