@@ -41,9 +41,9 @@ macOS is fully supported. Linux is alpha. See [Platform Support](/config/platfor
     superturtle start
     ```
 
-    This opens a tmux session called `superturtle-bot`. The bot survives terminal disconnects.
+    This opens a project-scoped tmux session and attaches to it immediately. The bot survives terminal disconnects.
 
-    - Re-attach: `tmux attach -t superturtle-bot`
+    - Re-attach: run `superturtle start` again, or use `superturtle status` to print the exact `tmux attach` command
     - Stop: `superturtle stop`
     - Status: `superturtle status`
   </Step>
@@ -69,11 +69,10 @@ If you're contributing to superturtle itself:
 git clone https://github.com/Rigos0/superturtle.git
 cd superturtle
 npx superturtle init
-cd super_turtle/claude-telegram-bot
-bun run start
+node super_turtle/bin/superturtle.js start
 ```
 
-`superturtle init` installs dependencies, creates `.superturtle/.env`, and prompts for your tokens. Then run the bot directly with `bun run start` from the bot directory.
+`superturtle init` installs dependencies, creates `.superturtle/.env`, and prompts for your tokens. In this repo, prefer the explicit `node super_turtle/bin/superturtle.js ...` form so you run the source checkout instead of any globally installed package.
 
 Optional defaults for testing model configuration:
 

@@ -16,12 +16,12 @@ Choose loop type based on complexity, iteration speed, and quota pressure.
 | Type | Calls per iteration | Runtime | Best for |
 |------|---------------------|----------|----------|
 | `slow` | 4 calls (Plan -> Groom -> Execute -> Review) | Claude + Codex | Complex, high-risk multi-file work |
-| `yolo` | 1 call | Claude | Default for most tasks |
-| `yolo-codex` | 1 call | Codex | Cost-efficient coding tasks |
+| `yolo` | 1 call | Claude | Claude-first implementation tasks |
+| `yolo-codex` | 1 call | Codex | Default autonomous coding tasks |
 | `yolo-codex-spark` | 1 call | Codex Spark (`gpt-5.3-codex-spark`) | Fastest Codex iterations |
 
 <Info>
-`ctl spawn` and `ctl start` default to `--type yolo`.
+`ctl spawn` and `ctl start` default to `--type yolo-codex`.
 </Info>
 
 ## How Each Loop Executes
@@ -112,8 +112,8 @@ Tradeoff:
 ## Selection Guide
 
 <Steps>
-  <Step title="Default to yolo">
-    Start with `yolo` for most tasks. It is the project default and uses Claude Code.
+  <Step title="Default to yolo-codex">
+    Start with `yolo-codex` for most tasks. It is the project default and gives the best cost/speed balance.
   </Step>
   <Step title="Escalate to slow for complex work">
     If a task needs explicit planning/review or crosses many boundaries, switch to `slow`.
@@ -131,13 +131,13 @@ Tradeoff:
 | Priority | Recommended type | Why |
 |----------|------------------|-----|
 | Maximum quality checks | `slow` | Includes planning and review each iteration |
-| Balanced default | `yolo` | Single-call loop + Claude reasoning |
+| Balanced default | `yolo-codex` | Single-call loop + Codex cost/speed balance |
 | Cost-efficient | `yolo-codex` | Single-call loop + low-cost Codex runtime |
 | Maximum iteration speed | `yolo-codex-spark` | Spark model tuned for fast cycles |
 
 ## Operational Notes
 
-- All loop types read `.subturtles/<name>/CLAUDE.md` as the source of truth.
+- All loop types read `.superturtle/subturtles/<name>/CLAUDE.md` as the source of truth.
 - All loop types check for self-stop directive:
 
 ```md

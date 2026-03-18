@@ -17,7 +17,7 @@ At runtime, it is a player-coach:
     Conversational control plane. Handles user intent, task framing, delegation decisions, and milestone messaging.
   </Card>
   <Card title="Layer 2: SubTurtles">
-    Autonomous background workers that execute scoped coding tasks from state files in `.subturtles/&lt;name&gt;/`.
+    Autonomous background workers that execute scoped coding tasks from state files in `.superturtle/subturtles/&lt;name&gt;/`.
   </Card>
 </CardGroup>
 
@@ -62,7 +62,7 @@ Core responsibilities:
     Spawn SubTurtles when work is multi-file, iterative, or benefits from autonomous test/fix loops.
   </Step>
   <Step title="Keep state explicit">
-    Before spawn, write `.subturtles/&lt;name&gt;/CLAUDE.md` with Current Task, End Goal, and Backlog.
+    Before spawn, write `.superturtle/subturtles/&lt;name&gt;/CLAUDE.md` with Current Task, End Goal, and Backlog.
   </Step>
   <Step title="Use spawn as the atomic boundary">
     Prefer a single `ctl spawn` command to create workspace, seed state, start loop, and register cron supervision.

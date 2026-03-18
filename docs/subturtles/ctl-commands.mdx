@@ -15,12 +15,12 @@ description: Full CLI reference for `super_turtle/subturtle/ctl` with flags, def
 | `status` | Show running state, type, elapsed/remaining time, and tunnel URL if present |
 | `logs` | Tail live SubTurtle logs |
 | `list` | List active SubTurtles (or archived with `--archived`) |
-| `archive` | Move a stopped SubTurtle to `.subturtles/.archive/<name>/` |
+| `archive` | Move a stopped SubTurtle to `.superturtle/subturtles/.archive/<name>/` |
 | `gc` | Archive stopped SubTurtles older than a max age |
 | `reschedule-cron` | Change recurring supervision interval for a running SubTurtle |
 
 <Info>
-Default loop type is `yolo`. Default timeout is `1h`. `spawn` default cron interval is `10m`.
+Default loop type is `yolo-codex`. Default timeout is `1h`. `spawn` default cron interval is `10m`.
 </Info>
 
 ## Duration Format
@@ -46,7 +46,7 @@ Used by:
 High-level command used by the Meta Agent.
 
 It:
-1. Creates `.subturtles/<name>/`
+1. Creates `.superturtle/subturtles/<name>/`
 2. Seeds `CLAUDE.md` from `--state-file` or piped stdin
 3. Creates `AGENTS.md -> CLAUDE.md` symlink
 4. Starts the SubTurtle
@@ -99,7 +99,7 @@ Low-level start command. Unlike `spawn`, it does not seed `CLAUDE.md` or registe
 Examples:
 
 ```bash
-# Start default workspace (.subturtles/default/)
+# Start default workspace (.superturtle/subturtles/default/)
 ./super_turtle/subturtle/ctl start
 
 # Start named workspace with explicit type/timeout
@@ -107,7 +107,7 @@ Examples:
 ```
 
 <Warning>
-`start` fails if `.subturtles/<name>/CLAUDE.md` does not already exist.
+`start` fails if `.superturtle/subturtles/<name>/CLAUDE.md` does not already exist.
 </Warning>
 
 ## `stop`

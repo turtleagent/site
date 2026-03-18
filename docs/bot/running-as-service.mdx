@@ -11,18 +11,16 @@ The simplest way to run the bot persistently:
 superturtle start
 ```
 
-This creates a tmux session called `superturtle-bot` that survives terminal disconnects.
+This creates a project-scoped tmux session that survives terminal disconnects.
 
 ```bash
 superturtle status          # Check if running
 superturtle stop            # Stop the bot
-tmux attach -t superturtle-bot  # Re-attach to see logs
+superturtle start           # Re-attach to the running tmux session
 ```
 
-The bot auto-wraps with `caffeinate` on macOS (prevents sleep) and `systemd-inhibit` on Linux.
-
 <Info>
-For most users, `superturtle start` is all you need. The sections below are for production setups that need auto-start on boot and crash recovery.
+For most users, `superturtle start` is all you need. Use `superturtle status` to print the exact tmux session and log paths for the current project. The sections below are for production setups that need auto-start on boot and crash recovery.
 </Info>
 
 ## macOS (LaunchAgent)
@@ -35,13 +33,13 @@ For auto-start on boot and automatic restart on crash.
 
 ```bash
 cp super_turtle/claude-telegram-bot/launchagent/com.claude-telegram-ts.plist.template \
-   ~/Library/LaunchAgents/com.superturtle-bot.plist
+   ~/Library/LaunchAgents/com.claude-telegram-ts.plist
 ```
 
 2. Edit the plist:
 
 ```bash
-nano ~/Library/LaunchAgents/com.superturtle-bot.plist
+nano ~/Library/LaunchAgents/com.claude-telegram-ts.plist
 ```
 
 Set your paths and credentials:
@@ -63,16 +61,16 @@ Set your paths and credentials:
 3. Load and verify:
 
 ```bash
-launchctl load ~/Library/LaunchAgents/com.superturtle-bot.plist
-launchctl list | grep superturtle
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.claude-telegram-ts.plist
+launchctl list | grep com.claude-telegram-ts
 ```
 
 ### Managing
 
 ```bash
-launchctl unload ~/Library/LaunchAgents/com.superturtle-bot.plist  # Stop
-launchctl load ~/Library/LaunchAgents/com.superturtle-bot.plist    # Start
-launchctl kickstart -k gui/$(id -u)/com.superturtle-bot            # Restart
+launchctl bootout gui/$(id -u)/com.claude-telegram-ts              # Stop
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.claude-telegram-ts.plist  # Start
+launchctl kickstart -k gui/$(id -u)/com.claude-telegram-ts         # Restart
 ```
 
 ### Prevent sleep
@@ -82,10 +80,10 @@ Go to **System Settings > Battery > Options** and enable **"Prevent automatic sl
 ### Shell aliases
 
 ```bash
-alias st='launchctl list | grep superturtle'
-alias st-stop='launchctl bootout gui/$(id -u)/com.superturtle-bot 2>/dev/null && echo "Stopped"'
-alias st-start='launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.superturtle-bot.plist 2>/dev/null && echo "Started"'
-alias st-restart='launchctl kickstart -k gui/$(id -u)/com.superturtle-bot && echo "Restarted"'
+alias st='launchctl list | grep com.claude-telegram-ts'
+alias st-stop='launchctl bootout gui/$(id -u)/com.claude-telegram-ts 2>/dev/null && echo "Stopped"'
+alias st-start='launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.claude-telegram-ts.plist 2>/dev/null && echo "Started"'
+alias st-restart='launchctl kickstart -k gui/$(id -u)/com.claude-telegram-ts && echo "Restarted"'
 ```
 
 ## Linux (systemd)
@@ -107,12 +105,13 @@ nano ~/.config/systemd/user/superturtle-bot.service
 ```
 
 ```ini
-WorkingDirectory=/home/USERNAME/superturtle/super_turtle/claude-telegram-bot
-ExecStart=/home/USERNAME/.bun/bin/bun run src/index.ts
+WorkingDirectory=/home/USERNAME/superturtle
+ExecStart=/bin/bash -lc 'cd /home/USERNAME/superturtle && exec "${SUPERTURTLE_BIN:-superturtle}" service run'
 
 Environment=TELEGRAM_BOT_TOKEN=your-bot-token
 Environment=TELEGRAM_ALLOWED_USERS=123456789
 Environment=CLAUDE_WORKING_DIR=/home/USERNAME/superturtle
+Environment=SUPERTURTLE_BIN=superturtle
 ```
 
 3. Enable and start:
@@ -164,10 +163,10 @@ bun run dev    # Auto-reload on file changes
 
 ```bash
 # tmux mode
-tmux attach -t superturtle-bot   # Check for errors
+superturtle status               # Prints exact tmux attach + log paths
 
 # macOS LaunchAgent
-tail -f /tmp/claude-telegram-bot.err
+superturtle logs loop
 
 # Linux systemd
 journalctl --user -u superturtle-bot -f
@@ -191,7 +190,6 @@ Check logs for crash reasons: Claude Code auth failure, network issues, Telegram
 |---------|-------|-------|
 | **Default** | `superturtle start` (tmux) | `superturtle start` (tmux) |
 | **Service manager** | launchd | systemd |
-| **Sleep prevention** | `caffeinate` (built-in) | `systemd-inhibit` |
 | **Auto-start** | `RunAtLoad=true` | `WantedBy=default.target` |
 
 ## Next steps

@@ -14,9 +14,10 @@ These commands are currently wired with `bot.command(...)` in `index.ts`.
 | Slash command | Aliases | What it does |
 |---------|---------|-------------|
 | `/new` | none | Resets both drivers (stopping active work), starts a fresh session overview |
+| `/stop` | none | Stops the active driver run and attempts to stop running SubTurtles |
 | `/status` | none | Shows the same overview as `/new` without resetting sessions |
-| `/looplogs` | none | Sends the last 50 lines from the raw run-loop log (`/tmp/claude-telegram-bot-ts.log`) |
-| `/pinologs` | none | Shows log-level buttons (Info/Warning/Errors) for filtered Pino logs (`/tmp/claude-telegram-bot.log.jsonl`) |
+| `/looplogs` | none | Sends the last 50 lines from the current main loop log (`/tmp/claude-telegram-<token-prefix>-bot-ts.log`) |
+| `/pinologs` | none | Shows log-level buttons (Info/Warning/Errors) for the current Pino log (`/tmp/claude-telegram-<token-prefix>-bot.log.jsonl`) |
 | `/usage` | none | Shows unified Claude + Codex quota/usage (when available) |
 | `/context` | none | Shows Claude context usage for the active Claude session |
 | `/model` | none | Opens model/effort picker for the active driver |
@@ -25,13 +26,14 @@ These commands are currently wired with `bot.command(...)` in `index.ts`.
 | `/sub` | `/subs`, `/subturtle`, `/subturtles`, `/turtle`, `/turtles` | Shows SubTurtle status with task/backlog summary and state/stop buttons |
 | `/cron` | none | Lists scheduled jobs with cancel buttons |
 | `/debug` | none | Shows internal diagnostics (driver/session/queue/background status) |
+| `/teleport` | none | Moves Telegram control to an E2B remote runtime |
+| `/home` | none | Returns Telegram control to your local PC runtime after teleport |
 | `/restart` | none | Restarts the bot process via restart marker + exit |
 
 ## Stop Intents (Command-Like)
 
-These are handled as stop intents in text handling (not via `bot.command(...)` registrations):
+These are handled as stop intents in text handling:
 
-- `/stop`
 - `/pause`
 - `/abort`
 - `!` (single character)
@@ -42,6 +44,7 @@ When matched, the bot stops active driver work and attempts to stop running SubT
 ## Notes
 
 - `/cron` does **not** currently have a `/jobs` slash alias in source.
-- Use `/looplogs` for raw launcher/runtime output (`live.sh` + `run-loop.sh`, stdout/stderr).
+- `/home` is most useful after `/teleport`; when you are already local it replies that the turtle is already home.
+- Use `/looplogs` for raw launcher/runtime output (`run-loop.sh`, stdout/stderr). The legacy un-prefixed log path is still supported as a fallback.
 - Use `/pinologs` for structured app logs when you need level/module filtering.
 - Programmatic control-plane operations (usage/model/driver/session/restart) are documented in [MCP Tools](/docs/bot/mcp-tools) under `bot_control`.

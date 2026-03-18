@@ -389,7 +389,7 @@ Claude: ✅ Message sent
 **Never commit secrets to git.** Use environment variables:
 
 ```bash
-# .env (gitignored)
+# .superturtle/.env (gitignored)
 NOTION_API_KEY=ntn_...
 THINGS_DATABASE_PATH=/path/to/database
 GITHUB_TOKEN=ghp_...
@@ -410,7 +410,7 @@ export const MCP_SERVERS: Record<string, McpServerConfig> = {
 ```
 
 <Warning>
-Environment variables are passed to the MCP process but not logged or exposed. Keep sensitive values in `.env` only.
+Environment variables are passed to the MCP process but not logged or exposed. Keep sensitive values in `.superturtle/.env` only.
 </Warning>
 
 ## Troubleshooting
@@ -419,7 +419,7 @@ Environment variables are passed to the MCP process but not logged or exposed. K
 
 1. Check the bot logs:
    ```bash
-   tail -f /tmp/claude-telegram-bot-ts.log
+   superturtle logs loop
    ```
 
 2. Verify the command runs:

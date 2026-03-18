@@ -5,10 +5,10 @@ description: Actual Claude/Codex driver behavior and model defaults used by the 
 
 The bot supports two drivers:
 
-- **Claude Code** via `@anthropic-ai/claude-agent-sdk`
-- **Codex** via `@openai/codex-sdk`
+- **Claude Code** via the local `claude` CLI subprocess
+- **Codex** via the local Codex CLI (`codex app-server`)
 
-Claude is the default active driver for a fresh preference state. Codex is available only when `CODEX_ENABLED=true`.
+Claude is the default active driver for a fresh preference state. Codex is available only when `CODEX_ENABLED=true` and the local `codex` CLI is working.
 
 ## Claude Code vs Codex
 

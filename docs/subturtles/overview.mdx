@@ -8,7 +8,7 @@ SubTurtles are autonomous background coding agents. The Meta Agent uses them to 
 The core model is simple:
 - Meta Agent decides what should be done.
 - SubTurtle executes one focused backlog item at a time.
-- State is tracked in `.subturtles/<name>/CLAUDE.md`.
+- State is tracked in `.superturtle/subturtles/<name>/CLAUDE.md`.
 - Completion is signaled by appending `## Loop Control` and `STOP`.
 
 ## What a SubTurtle Is
@@ -16,14 +16,14 @@ The core model is simple:
 A SubTurtle is a worker process started by `./super_turtle/subturtle/ctl spawn` that runs an autonomous coding loop (`slow`, `yolo`, `yolo-codex`, or `yolo-codex-spark`).
 
 Each SubTurtle:
-- Runs in its own workspace: `.subturtles/<name>/`
+- Runs in its own workspace: `.superturtle/subturtles/<name>/`
 - Reads and writes only its own task state file
 - Works from repo root, so it can modify project code
 - Is constrained by a timeout watchdog
 - Is supervised by recurring, silent cron check-ins
 
 <Info>
-`ctl spawn` defaults are `--type yolo`, `--timeout 1h`, and `--cron-interval 10m`.
+`ctl spawn` defaults are `--type yolo-codex`, `--timeout 1h`, and `--cron-interval 10m`.
 Supervision is registered with `silent: true` by default.
 (`META_SHARED.md` currently describes a 5-minute target cadence, but the executable default in `ctl` is 10 minutes unless overridden.)
 </Info>
@@ -33,7 +33,7 @@ Supervision is registered with `silent: true` by default.
 Example workspace for a SubTurtle named `docs-agent`:
 
 ```text
-.subturtles/docs-agent/
+.superturtle/subturtles/docs-agent/
 ├── CLAUDE.md        # Per-agent task state (source of truth)
 ├── AGENTS.md        # Symlink to CLAUDE.md
 ├── subturtle.pid    # Worker process id
@@ -45,7 +45,7 @@ Example workspace for a SubTurtle named `docs-agent`:
 ```
 
 `ctl spawn` seeds `CLAUDE.md`, creates the `AGENTS.md` symlink, starts the SubTurtle, and registers recurring cron supervision.
-When a SubTurtle is stopped (manually or via self-stop cleanup), its workspace is archived to `.subturtles/.archive/<name>/`.
+When a SubTurtle is stopped (manually or via self-stop cleanup), its workspace is archived to `.superturtle/subturtles/.archive/<name>/`.
 
 ## State File Ownership
 

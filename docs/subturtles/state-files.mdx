@@ -12,14 +12,14 @@ The Meta Agent seeds it before spawn. The SubTurtle reads and updates it every i
 Each SubTurtle has its own workspace:
 
 ```text
-.subturtles/<name>/
+.superturtle/subturtles/<name>/
 ├── CLAUDE.md   # task state, edited by meta + worker
 └── AGENTS.md   # symlink to CLAUDE.md
 ```
 
 - Meta Agent owns initial seeding and task framing.
 - SubTurtle owns iterative progress updates.
-- Both operate on the same file path: `.subturtles/<name>/CLAUDE.md`.
+- Both operate on the same file path: `.superturtle/subturtles/<name>/CLAUDE.md`.
 
 <Info>
 `ctl spawn` always creates `AGENTS.md -> CLAUDE.md` so agents that read either filename see the same content.
@@ -59,7 +59,7 @@ STOP
 
 ## How Meta Agent Seeds State
 
-`ctl spawn` accepts state from a file or stdin and writes it to `.subturtles/<name>/CLAUDE.md`.
+`ctl spawn` accepts state from a file or stdin and writes it to `.superturtle/subturtles/<name>/CLAUDE.md`.
 
 ```bash
 # Seed from file
@@ -74,7 +74,7 @@ cat /tmp/docs-agent-state.md | ./super_turtle/subturtle/ctl spawn docs-agent --s
 If no state is provided, spawn fails.
 
 <Warning>
-`ctl start` does not seed state. It requires an existing `.subturtles/<name>/CLAUDE.md`.
+`ctl start` does not seed state. It requires an existing `.superturtle/subturtles/<name>/CLAUDE.md`.
 </Warning>
 
 ## How SubTurtle Uses State
@@ -120,7 +120,7 @@ STOP_DIRECTIVE = "## Loop Control\\nSTOP"
 `AGENTS.md` in each workspace is a symlink to `CLAUDE.md`:
 
 ```bash
-ln -sf CLAUDE.md .subturtles/<name>/AGENTS.md
+ln -sf CLAUDE.md .superturtle/subturtles/<name>/AGENTS.md
 ```
 
 This keeps compatibility with tooling that expects `AGENTS.md` while preserving a single state source of truth.

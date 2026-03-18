@@ -35,7 +35,7 @@ super_turtle/claude-telegram-bot/src/silent-notifications.ts
 
 The cron job prompt is pre-seeded to perform supervision actions:
 - Run `ctl status <name>`
-- Read `.subturtles/<name>/CLAUDE.md`
+- Read `.superturtle/subturtles/<name>/CLAUDE.md`
 - Review `git log --oneline -10`
 - Stay silent unless a notable event occurs
 
@@ -137,7 +137,7 @@ When a SubTurtle finishes and the roadmap still has pending work:
     Update root `CLAUDE.md`: mark completed items and move current focus to the next backlog item.
   </Step>
   <Step title="Seed next SubTurtle state">
-    Write a fresh `.subturtles/&lt;name&gt;/CLAUDE.md` for the next focused chunk.
+    Write a fresh `.superturtle/subturtles/&lt;name&gt;/CLAUDE.md` for the next focused chunk.
   </Step>
   <Step title="Spawn next run">
     Start a new `ctl spawn` run; supervision is auto-registered again.
