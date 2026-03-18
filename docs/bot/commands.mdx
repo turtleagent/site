@@ -26,8 +26,6 @@ These commands are currently wired with `bot.command(...)` in `index.ts`.
 | `/sub` | `/subs`, `/subturtle`, `/subturtles`, `/turtle`, `/turtles` | Shows SubTurtle status with task/backlog summary and state/stop buttons |
 | `/cron` | none | Lists scheduled jobs with cancel buttons |
 | `/debug` | none | Shows internal diagnostics (driver/session/queue/background status) |
-| `/teleport` | none | Moves Telegram control to an E2B remote runtime |
-| `/home` | none | Returns Telegram control to your local PC runtime after teleport |
 | `/restart` | none | Restarts the bot process via restart marker + exit |
 
 ## Stop Intents (Command-Like)
@@ -44,7 +42,6 @@ When matched, the bot stops active driver work and attempts to stop running SubT
 ## Notes
 
 - `/cron` does **not** currently have a `/jobs` slash alias in source.
-- `/home` is most useful after `/teleport`; when you are already local it replies that the turtle is already home.
 - Use `/looplogs` for raw launcher/runtime output (`run-loop.sh`, stdout/stderr). The legacy un-prefixed log path is still supported as a fallback.
 - Use `/pinologs` for structured app logs when you need level/module filtering.
 - Programmatic control-plane operations (usage/model/driver/session/restart) are documented in [MCP Tools](/docs/bot/mcp-tools) under `bot_control`.

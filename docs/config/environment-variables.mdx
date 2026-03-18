@@ -59,16 +59,6 @@ Get from [platform.openai.com/api-keys](https://platform.openai.com/api-keys).
 
 Voice transcription won't work without this, but other features are unaffected.
 
-### E2B_API_KEY
-
-Required for the current BYO-E2B `/teleport` flow.
-
-```bash
-E2B_API_KEY=e2b_...
-```
-
-If this is unset, local SuperTurtle usage still works, but `/teleport` cannot launch the remote E2B runtime.
-
 ### SHOW_TOOL_STATUS
 
 Show routine tool-call progress messages in Telegram while an answer runs.
@@ -229,21 +219,6 @@ DASHBOARD_AUTH_TOKEN=your-secret-token
 
 Optional. For local-only usage, leave unset. If set, dashboard requires this token (`Authorization: Bearer <token>`, `x-dashboard-token`, or `?token=`).
 
-## Teleport and Remote Runtime (Advanced)
-
-These variables exist for E2B/webhook runtimes and are usually managed by SuperTurtle itself rather than set manually in normal local use:
-
-- `TELEGRAM_TRANSPORT`
-- `TELEGRAM_WEBHOOK_URL`
-- `TELEGRAM_WEBHOOK_SECRET`
-- `TELEGRAM_WEBHOOK_HOST`
-- `TELEGRAM_WEBHOOK_PORT`
-- `TELEGRAM_WEBHOOK_HEALTH_PATH`
-- `TELEGRAM_WEBHOOK_READY_PATH`
-- `SUPERTURTLE_RUNTIME_ROLE`
-- `SUPERTURTLE_REMOTE_MODE`
-- `SUPERTURTLE_RUNTIME_INSTALL_SPEC`
-
 ## Advanced Configuration
 
 ### CLAUDE_CLI_PATH
@@ -399,7 +374,6 @@ TELEGRAM_ALLOWED_USERS=123456789
 # ============ Recommended ============
 CLAUDE_WORKING_DIR=~/my-assistant
 OPENAI_API_KEY=sk-proj-1234567890abcdef
-E2B_API_KEY=e2b_...
 SHOW_TOOL_STATUS=false
 MAIN_PROVIDER=claude
 DEFAULT_CLAUDE_MODEL=claude-sonnet-4-6
