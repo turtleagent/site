@@ -225,9 +225,7 @@ export default function Home() {
 	              <h1 className="headline mt-6 sm:mt-7 md:mt-8">
 	                SuperTurtle!
 	              </h1>
-              <p className="lead max-w-2xl">
-                Code from anywhere with your voice
-              </p>
+              <p className="lead max-w-2xl">Coding agent on your phone</p>
 
               <div className="mt-7 flex flex-wrap justify-center gap-2 sm:gap-3">
                 <a

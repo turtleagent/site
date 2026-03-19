@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "SuperTurtle",
-  description: "Message it on Telegram. It wraps Claude Code or Codex — your existing subscription, no API tokens. It writes code, runs tests, and commits while you do other things.",
+  description: "Coding agent on your phone. Message it on Telegram. It wraps Claude Code or Codex and works through your existing subscription.",
   icons: {
     icon: "/gemoji-turtle-turtle.png",
     shortcut: "/gemoji-turtle-turtle.png",

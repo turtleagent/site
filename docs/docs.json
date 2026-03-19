@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "name": "Super Turtle",
-  "description": "Autonomous coding system you control from Telegram. Uses your Claude Code and Codex subscriptions.",
+  "description": "Coding agent on your phone. Control Claude Code and Codex from Telegram.",
   "theme": "mint",
   "colors": {
     "primary": "#E53935",
